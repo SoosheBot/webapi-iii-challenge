@@ -17,13 +17,14 @@ router.post('/', validateUser, async (req, res) => {
 });
 
 router.post('/:id/posts', validateUserId, validatePost, async (req, res) => {
-    const {id} = req.user;
+    const {id} = req.params;
     const {text} = req.body;
     console.log(text, id);
-
+    //to have the code check for errors -- write an if/else statement here
     try {
-        const newPost = await Post.insert({ text, user_id:id})
+        const newPost = await Post.insert({user_id:id, text})
         res.status(201).json(newPost)
+        console.log(newPost)
     }
     catch(err) {
         res.status(500).json({error: 'There was an error while saving post to the database.'})
@@ -87,7 +88,7 @@ router.delete('/:id', validateUserId, async (req, res) => {
 router.put('/:id', validateUserId, validateUser, async (req, res) => {
     try {
         const userName = req.body;
-        const {id} = req.user;
+        const {id} = req.params;
         await User.update(id, userName)
         
         const updatedUser = await User.getById(id)
@@ -106,6 +107,7 @@ function validateUserId(req, res, next) {
    .then(user => {
        if (user) {
            req.user = user;
+           next();
        } else {
            res.status(400).json({error: 'invalid user ID'})
        }
