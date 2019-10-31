@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/LambdaSchool/Node-Blog#readme",
   "dependencies": {
+    "add": "^2.0.6",
     "express": "^4.17.1",
+    "git": "^0.1.5",
     "knex": "^0.18.3",
     "sqlite3": "^4.0.9"
   },

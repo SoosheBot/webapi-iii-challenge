@@ -1,10 +1,11 @@
 const express = require('express');
 
-const helmet = require('helmet');
-const morgan = require('morgan')
+// const helmet = require('helmet');
+// const morgan = require('morgan')
 
 const postRouter = require('./posts/postRouter');
 const userRouter = require('./users/userRouter');
+
 const server = express();
 
 server.get('/', (req, res) => {
