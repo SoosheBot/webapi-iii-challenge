@@ -34,7 +34,24 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {});
+router.delete("/:id", (req, res) => {
+    const {id} = req.params;
+    Post.remove(id)
+    .then(count => {
+        if (count > 0) {
+            res.status(200).json({message: "This post has been destrooooyedddd mwahahaha...."})
+        } else {
+            res.status(404).json({message: 'Could not find the post s\'up with that?'});
+        }
+    })
+    .catch(error => {
+        // log error to server
+        console.log(error);
+        res.status(500).json({
+          message: "Error removing the post."
+        });
+      });
+});
 
 router.put("/:id", (req, res) => {});
 
