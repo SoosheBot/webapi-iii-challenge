@@ -55,8 +55,19 @@ router.get('/:id', validateUserId, async (req, res) => {
     }
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, async (req, res) => {
+    const {id} = req.user;
 
+    try {
+        const post = await User.getUserPosts(id)
+            if(post && post.length > 0) {
+                res.status(200).json(post)
+            } else {
+                res.status(404).json({ errorMessage: 'The post with the specified user ID does not exist.' })
+            }
+    } catch (err) {
+        res.status(500).json({ errorMessage: 'The posts information could not be retrieved.' })
+    }
 });
 
 router.delete('/:id', (req, res) => {
