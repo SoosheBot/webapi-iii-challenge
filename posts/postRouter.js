@@ -34,38 +34,56 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post('/', (req,res) => {
-    Post.insert(post => {
-        res.status(201).json(post);
+router.post("/", (req, res) => {
+  Post.insert(post => {
+    res.status(201).json(post);
+  }).catch(error => {
+    // log error to server
+    console.log(error);
+    res.status(500).json({
+      message: "Error adding the post sryyyyyy."
+    });
+  });
+});
+
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  Post.remove(id)
+    .then(count => {
+      if (count > 0) {
+        res.status(200).json({
+          message: "This post has been destrooooyedddd mwahahaha...."
+        });
+      } else {
+        res
+          .status(404)
+          .json({ message: "Could not find the post s'up with that?" });
+      }
     })
     .catch(error => {
-        // log error to server
-        console.log(error);
-        res.status(500).json({
-          message: 'Error adding the post sryyyyyy.'
-        });
+      // log error to server
+      console.log(error);
+      res.status(500).json({
+        message: "Error removing the post."
       });
+    });
 });
-router.delete("/:id", (req, res) => {
+
+router.put("/:id", (req, res) => {
     const {id} = req.params;
-    Post.remove(id)
-    .then(count => {
-        if (count > 0) {
-            res.status(200).json({message: "This post has been destrooooyedddd mwahahaha...."})
+    Post.update(id)
+    .then(post => {
+        if (post) {
+            res.status(200).json(post);
         } else {
-            res.status(404).json({message: 'Could not find the post s\'up with that?'});
+            res.status(404).json({message: 'The post could not be found.'})
         }
     })
     .catch(error => {
-        // log error to server
-        console.log(error);
-        res.status(500).json({
-          message: "Error removing the post."
-        });
-      });
+        console.log('An error omg', error);
+        res.status(500).json({message: 'Error updating the post so sorry.'});
+    });
 });
-
-router.put("/:id", (req, res) => {});
 
 // custom middleware
 
