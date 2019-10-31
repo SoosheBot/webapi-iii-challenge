@@ -34,6 +34,18 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.post('/', (req,res) => {
+    Post.insert(post => {
+        res.status(201).json(post);
+    })
+    .catch(error => {
+        // log error to server
+        console.log(error);
+        res.status(500).json({
+          message: 'Error adding the post sryyyyyy.'
+        });
+      });
+});
 router.delete("/:id", (req, res) => {
     const {id} = req.params;
     Post.remove(id)
