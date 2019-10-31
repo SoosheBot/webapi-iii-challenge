@@ -70,8 +70,18 @@ router.get('/:id/posts', validateUserId, async (req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
-
+router.delete('/:id', validateUserId, async (req, res) => {
+    const {id} = req.user;
+    try {
+        const deleteUserId = await User.remove(id);
+        if (deleteUserId) {
+            res.status(200).json({message: 'User was deleted.'})
+        } else {
+            res.status(400).json({error: 'User with this specified ID could not be deleted.'})
+        }
+    } catch (err) {
+        res.status(500).json({error:'The user was not removed.'})
+    }
 });
 
 router.put('/:id', (req, res) => {
