@@ -101,7 +101,13 @@ router.put('/:id', validateUserId, validateUser, async (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-
+    if (!req.body) {
+        res.status(400).json({error: 'missing user data'})
+    } else if (!req.body.name) {
+        res.status(400).json({error: 'missing user name'})
+    } else {
+        next()
+    }
 };
 
 function validateUser(req, res, next) {
