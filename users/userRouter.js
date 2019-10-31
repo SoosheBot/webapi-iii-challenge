@@ -101,6 +101,21 @@ router.put('/:id', validateUserId, validateUser, async (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
+   const {id} = req.params;
+   User.getById(id)
+   .then(user => {
+       if (user) {
+           req.user = user;
+       } else {
+           res.status(400).json({error: 'invalid user ID'})
+       }
+   }) 
+   .catch(err => {
+       res.status(500).json({error: 'User could not be retrieved.'})
+   })
+};
+
+function validateUser(req, res, next) {
     if (!req.body) {
         res.status(400).json({error: 'missing user data'})
     } else if (!req.body.name) {
@@ -108,10 +123,6 @@ function validateUserId(req, res, next) {
     } else {
         next()
     }
-};
-
-function validateUser(req, res, next) {
-
 };
 
 function validatePost(req, res, next) {
