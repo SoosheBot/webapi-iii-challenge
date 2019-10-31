@@ -8,7 +8,7 @@ server.use(express.json());
 server.use(helmet());
 server.use(logger);
 
-server.use('./api.users', userRouter);
+server.use('./api/users', userRouter);
 server.use('./api/posts', postRouter);
 
 server.get('/', (req, res) => {
@@ -18,7 +18,8 @@ server.get('/', (req, res) => {
 //custom middleware
 
 function logger(req, res, next) {
-
+  console.log(`${req.method} Request`)
+  next()
 };
 
 module.exports = server;
